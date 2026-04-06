@@ -19,21 +19,19 @@
         {{project.created_at}}
         <div>
             {% if user == project.author %}
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger mt-2" name="project-id" value={{project.id}}  >Delete</button>
-                <button type="submit" class="btn btn-success mt-2" name="project-id" value={{project.id}}  >Edit</button>
-                
-            </form>
-        
-            {% endif %}
-            {% if user != project.author %}
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success mt-2" name="project-id" value={{project.id}}  >✋</button>
-                
-            </form>
-            {% endif %}
+    <!-- Update button (GOES TO EDIT PAGE) -->
+    <a href="{% url 'update_project' project.id %}" class="btn btn-success mt-2">
+        Update
+    </a>
+
+    <!-- Delete button (STAYS A FORM) -->
+    <form method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger mt-2" name="project-id" value="{{ project.id }}">
+            Delete
+        </button>
+    </form>
+{% endif %}
         </div>
     </div>
 </div>
