@@ -2,10 +2,17 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm, ProjectForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
+from .models import Project
 
 @login_required(login_url="/login")
 def home(request):
-    return render(request, 'main/home.html')
+    projects = Project.objects.all()
+    if request.method == "POST":
+        project_id = request.POST.get("project-id")
+        project = Project.objects.filter(id=project_id).first()
+        if project and project.author == request.user: 
+            project.delete()
+    return render(request, 'main/home.html', {"projects":projects})
 
 def sign_up(request): 
     if request.method == 'POST': 
