@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, ProjectForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 
@@ -24,3 +24,18 @@ def sign_up(request):
 def logOut(request): 
     logout(request)
     return redirect("/login")
+
+@login_required(login_url="/login")
+def create_project(request): 
+    if request.method == 'POST': 
+        form = ProjectForm(request.POST)
+        if form.is_valid(): 
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect("/home")
+    else: 
+        form = ProjectForm() 
+    
+    return render(request, 'main/create_project.html', {"form":form})
+
