@@ -23,6 +23,22 @@ def home(request):
     return render(request, 'main/home.html', {
         "projects":projects})
 
+# celebration wall
+@login_required(login_url="/login")
+def celebration_wall(request): 
+    projects = Project.objects.all().order_by('-updated_at')  # most recently updated posts to the top (chronological order feed)
+    if request.method == "POST":
+        project_id = request.POST.get("project-id")
+        content = request.POST.get("content")
+        project = Project.objects.filter(id=project_id).first()
+       
+
+    return render(request, 'main/celebration_wall.html', {"projects":projects})
+
+
+
+
+
 
 # registration
 def sign_up(request): 

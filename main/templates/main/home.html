@@ -5,6 +5,7 @@
 {% block content %}
 <div class="mt-4 mb-5">
     {% for project in projects %}
+    {% if project.stage != "Completed" %}
         <div class="card mt-2">
             <div class="card-header">
                 <strong>@{{ project.author.username }}</strong>
@@ -45,6 +46,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     {% empty %}
         <p>No projects yet.</p>
     {% endfor %}
