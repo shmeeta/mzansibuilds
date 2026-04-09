@@ -9,6 +9,12 @@ from .models import Project, Milestone, Notification
 @login_required(login_url="/login")
 def home(request):
     projects = Project.objects.all().order_by('-updated_at')  # most recently updated posts to the top (chronological order feed)
+    
+    user_collabs= Notification.objects.filter(
+        sender = request.user, 
+        notification_type = 'collaborate'
+    ).values_list('project_id', flat=True)
+    
     if request.method == "POST":
         project_id = request.POST.get("project-id")
         content = request.POST.get("content")
@@ -21,7 +27,8 @@ def home(request):
 
       
     return render(request, 'main/home.html', {
-        "projects":projects})
+        "projects":projects, 
+        "user_collabs": user_collabs})
 
 # celebration wall
 @login_required(login_url="/login")
@@ -39,9 +46,6 @@ def celebration_wall(request):
     return render(request, 'main/celebration_wall.html', {
         "projects":projects, 
         "user_celebrations": user_celebrations})
-
-
-
 
 
 
@@ -110,6 +114,7 @@ def update_project(request, pk):
     return render(request, 'main/edit_project.html', {"form": form, "project": project})
 
 
+# send a celebration notification 
 @login_required(login_url="/login")
 def send_celebration_notification(request, project_id): 
     project = get_object_or_404(Project, id=project_id) 
@@ -133,20 +138,34 @@ def send_celebration_notification(request, project_id):
         )
     return redirect('celebration_wall')
 
+
+# send a collaboration request
 @login_required(login_url="/login")
 def send_collaboration_request(request, project_id): 
     project = get_object_or_404(Project, id=project_id)
     author = project.author
+
+    # create the notification if the user is not the author + notification hasn't been sent yet
     if author != request.user: 
+        already_sent = Notification.objects.filter(
+            sender= request.user , 
+            project = project, 
+            notification_type = 'collaborate'
+        ).exists()
+ 
+    if not already_sent: 
         Notification.objects.create(
-            recipient=author, 
-            sender=request.user, 
-            project=project, 
-            notification_type='collaborate' 
+            recipient = author, 
+            sender = request.user, 
+            project = project, 
+            notification_type = 'collaborate'
         )
+
+    
     return redirect("home")
 
 
+# view your notifications
 @login_required(login_url="/login")
 def notifications_view(request):
     notifications = request.user.notifications.all().order_by('-created_at')
