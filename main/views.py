@@ -5,6 +5,13 @@ from django.contrib.auth import login, logout, authenticate
 from .models import Project, Milestone, Notification
 
 
+# landing page 
+def landing_page(request): 
+    if request.user.is_authenticated: 
+        return redirect('home')
+    
+    return render(request, 'main/landing_page.html')
+
 # home page 
 @login_required(login_url="/login")
 def home(request):
