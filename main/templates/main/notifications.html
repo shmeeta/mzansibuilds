@@ -13,7 +13,11 @@
                     
                     <div>
                         {% if n.notification_type == 'celebrate' %}
-                            <i class="bi bi-award-fill text-success"></i> <strong>@{{ n.sender.username }}</strong> congratulated you on <strong>{{ n.project.title }}</strong>!
+                            <i class="bi bi-award-fill text-success"></i> 
+<a href="{% url 'profile_page' username=n.sender.username %}" class="text-decoration-none text-success">
+    <strong>@{{ n.sender.username }}</strong>
+</a> 
+congratulated you on <strong>{{ n.project.title }}</strong>!
                         {% else %}
                             <i class="bi bi-chat-heart-fill text-primary"></i> <strong>@{{ n.sender.username }}</strong> wants to collaborate on <strong>{{ n.project.title }}</strong>!
                         {% endif %}

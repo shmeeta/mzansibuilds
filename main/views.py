@@ -182,3 +182,9 @@ def notifications_view(request):
         return redirect('notifications') 
 
     return render(request, 'main/notifications.html', {'notifications': notifications})
+
+
+@login_required(login_url="/login")
+def project_details(request, pk): 
+    project = get_object_or_404(Project, pk=pk)
+    return render(request, 'main/view_project.html',{"project": project})

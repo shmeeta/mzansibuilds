@@ -11,6 +11,7 @@
 
     <div class="mt-4">
         <h6>Progress Updates:</h6>
+      
         {% for milestone in project.milestones.all %}
             <div class="border p-2 mb-1">
                 <strong>@{{ milestone.author.username }}</strong>: {{ milestone.content }}

@@ -8,13 +8,17 @@
     {% if project.stage != "Completed" %}
         <div class="card mt-2">
             <div class="card-header">
-                <strong>@{{ project.author.username }}</strong>
+                <a href="{% url 'profile_page' username=project.author.username %}" class="text-decoration-none text-dark">
+        <strong>@{{ project.author.username }}</strong>
+    </a>
             </div>
 
             <div class="card-body d-flex flex-row justify-content-between">
                 <div>
-                    <h5 class="card-title">{{ project.title }}</h5>
-                    <p>{{ project.description }}</p>
+                    <a href="{% url 'project_details' project.id %}" class="text-decoration-none text-success">
+    <h5 class="card-title">{{ project.title }}</h5>
+</a>
+                    <p>{{ project.description|truncatechars:250 }}</p>
                     <span class="badge bg-success">
                         <strong>Stage:</strong> {{ project.get_stage_display }}
                     </span>

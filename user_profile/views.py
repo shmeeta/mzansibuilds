@@ -8,8 +8,10 @@ from .forms import ProfileUpdateForm
 @login_required(login_url="/login") 
 def user_profile(request, username):
     user_to_view = get_object_or_404(User, username=username)
+    user_projects= user_to_view.project_set.all().order_by('-created_at')
     return render(request, 'user_profile/profile.html', {
-        'profile_user': user_to_view
+        'profile_user': user_to_view, 
+        'projects': user_projects
     })
 
 @login_required
