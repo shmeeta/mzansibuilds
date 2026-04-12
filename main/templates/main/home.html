@@ -41,12 +41,9 @@
                             Update
                         </a>
 
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="project-id" value="{{ project.id }}">
-                           <button type="submit" name="delete" value="1" class="btn btn-sm btn-outline-danger">
-                                Delete
-                            </button>
+                        <form action="{% url 'delete_project' project.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                         </form>
                     {% endif %}
                     {% if user != project.author %}

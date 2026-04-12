@@ -12,5 +12,7 @@ urlpatterns = [
     path('send-collab-request/<int:project_id>/', views.send_collaboration_request, name='send_collab_request' ),
     path('celebrate-project/<int:project_id>/', views.send_celebration_notification, name='send_celebration'),
     path('notifications/',views.notifications_view, name="notifications"),
-    path('view-project/<int:pk>/', views.project_details, name='project_details')
+    path('view-project/<int:pk>/', views.project_details, name='project_details'),
+    path('delete-project/<int:pk>/', views.delete_project, name='delete_project'),
+
 ]

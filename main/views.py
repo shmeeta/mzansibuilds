@@ -5,6 +5,15 @@ from django.contrib.auth import login, logout, authenticate
 from .models import Project, Milestone, Notification
 
 
+# delete function 
+@login_required(login_url="/login")
+def delete_project(request, pk): 
+    project = get_object_or_404(Project, pk=pk)
+    if project.author == request.user: 
+        project.delete()
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+
 # landing page 
 def landing_page(request): 
     if request.user.is_authenticated: 
@@ -21,17 +30,6 @@ def home(request):
         sender = request.user, 
         notification_type = 'collaborate'
     ).values_list('project_id', flat=True)
-    
-    if request.method == "POST":
-        project_id = request.POST.get("project-id")
-        content = request.POST.get("content")
-        project = Project.objects.filter(id=project_id).first()
-       
-        # deletion
-        if project and project.author == request.user: 
-            project.delete()
-            return redirect('/home')
-
       
     return render(request, 'main/home.html', {
         "projects":projects, 
